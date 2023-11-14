@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -14,12 +15,24 @@ public class PlayerMovement : MonoBehaviour
     public bool isMoving;
     Rigidbody2D rb;               //store the rigidbody of an object
 
+    public int maxHealth;          //determines max amount of health the player can have
+    public int currentHealth;      //tracks current health of the player
+
+    public Transform startPos;
+
+    public GameObject Health1;
+    public GameObject Health2;
+
     // Start is called before the first frame update
     void Start()
     {
         speed = 10f;
         jump = 400f;
         rb = GetComponent<Rigidbody2D>();      //get the rigidbody of the object
+
+        maxHealth = 2;                //set max health to two
+
+        currentHealth = maxHealth;    //set current health to max health
     }
 
     // Update is called once per frame
@@ -32,7 +45,7 @@ public class PlayerMovement : MonoBehaviour
         {
             Debug.Log("space");
             rb.AddForce(new Vector2(rb.velocity.x, jump));
-            isJumping= true;
+            isJumping = true;
         }
     }
 
@@ -41,6 +54,27 @@ public class PlayerMovement : MonoBehaviour
         if (other.gameObject.CompareTag("ground"))
         {
             isJumping = false;
+        }
+
+        if (other.gameObject.CompareTag ("Respawn"))
+        {
+            TakeDamage(1);
+        }
+    }
+
+    void TakeDamage(int amount)
+    {
+        currentHealth -= amount;                    //lower health
+        transform.position = new Vector2(startPos.position.x, startPos.position.y);
+
+        if(currentHealth == 2)
+        {
+            Health1.SetActive
+        }
+
+        if (currentHealth <= 0)                      //if health equal zero
+        {
+            SceneManager.LoadScene("GameOver");     //go to Gameover scene
         }
     }
 }
